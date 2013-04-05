@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<project name="xmlv" default="compile" basedir=".">
+  <property name="masterbuild.dir" location="."/>
+  <property name="build.dir" location="build"/>
+  <property name="src.dir" location="src"/>
+  <property name="xerces.dir" location="c:/usr/local/apache/xerces/xerces-2_11_0"/>
+  <property name="version" value="1.0.0"/>
+
+  <target name="init-java">
+    <mkdir dir="${build.dir}/classes"/>
+  </target>
+
+  <path id="class.path">
+    <pathelement path="${build.dir}/classes"/>
+    <pathelement path="${xerces.dir}/xercesImpl.jar"/>
+    <pathelement path="${xerces.dir}/xml-apis.jar"/>
+    <pathelement path="${xerces.dir}/resolver.jar"/>
+    <pathelement path="${xerces.dir}/serializer.jar"/>
+    <pathelement path="${xerces.dir}/xercesSamples.jar"/>
+    <pathelement path="${xerces.dir}/org.eclipse.wst.xml.xpath2.processor_1.1.0.jar"/>
+  </path>
+
+  <target name="compile" depends="init-java">
+    <javac srcdir="${src.dir}"
+           destdir="${build.dir}/classes"
+           debug="on"
+           deprecation="on"
+           classpathref="class.path"
+           includeantruntime="false"
+           includeJavaRuntime="true"
+           >
+      <compilerarg value="-Xlint:unchecked"/>
+    </javac>
+  </target>
+
+  <!--
+      for fn in `ls c:/usr/kjh/proj/uspto/forms/dev/out/includeAll/*.xsd`; do java -jar c:/usr/kjh/proj/xmlv/xmlv.jar -c c:/usr/kjh/proj/uspto/xsd/catalog.xml -f -a $fn; done
+  -->
+  <target name="dist" depends="compile">
+    <jar jarfile="xmlv.jar" basedir="build/classes">
+      <manifest>
+        <attribute name="Specification-Title" value="xmlv"/>
+        <attribute name="Specification-Version" value="${version}"/>
+        <attribute name="Specification-Vendor" value="Entelechy Corporation"/>
+        <attribute name="Main-Class" value="com.entel.xml.XMLV"/>
+        <attribute name="Class-Path" value="lib/xercesImpl.jar lib/resolver.jar"/>
+      </manifest>
+      <zipgroupfileset dir="c:/usr/local/apache/xerces/xerces-2_11_0" >
+        <include name="xercesImpl.jar"/>
+        <include name="resolver.jar"/>
+      </zipgroupfileset>
+    </jar>
+  </target>
+
+  <target name="clean">
+    <delete dir="${build.dir}"/>
+  </target>
+</project>
