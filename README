@@ -1,0 +1,38 @@
+xmlv: XML and XSD Validator
+
+Often during projects for which I have to create XML Schemas, I want
+to be sure that I'm not making any mistakes.  I want to validate the
+XSD itself in a manner similar to how any given XML instance file can
+be validated against an XSD.  Past possibilities have included:
+
+1. Treat the XSD as an XML file to be validated against the XML Schema
+schema for XML Schemas:
+    http://www.w3.org/2001/XMLSchema.xsd
+The problem with this approach is that there are limits to what can be
+expressed in XML Schema, so this sort of recursive self-check is 
+necessarily weak.
+
+2. Use IBM's XML Schema Quality Checker.  This was my preferred
+approach for many years.  Then, while automatically generating large
+numbers of XSDs for the USPTO, I encountered sets of included XSDs for
+which SQC never returned.  Unfortunately, SQC is not an open source
+project, and support seems to have long been discontinued: Its forum
+is inactive back through 2004:
+    http://www.ibm.com/developerworks/forums/forum.jspa?forumID=707
+And no new releases have occured since version 2.1 in 2003:
+    http://lists.w3.org/Archives/Public/xmlschema-dev/2003Jul/0102.html
+
+After a decade of keeping my XSDs solid via SQC, I needed an
+replacement.  So, I wrote xmlv, a thin wrapper around Xerces-J, a
+battle-hardened XML parser.  The Xerces project includes an
+XMLGrammarPreparser class that performs extensive checks when loading
+an XSD.  Xmlv uses XMLGrammarPreparser at its core.  It borrows from
+the sample Xerces v2.11 sample program, XMLGrammarBuilder.java, by
+Neil Graham and includes support for XML Catalogs.  Xmlv provides
+reliable XSD checking, and it tackled the knarly USPTO modular XSD set
+without getting stuck in an infinite loop like SQC did.  (It also does
+routine XML instance validation too.)  It's my new go-to tool for XML
+validation and XSD checking.
+
+Kenneth J Hughes (kjh@entel.com)
+2013-04-04
