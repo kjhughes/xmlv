@@ -1,5 +1,15 @@
 xmlv: XML and XSD Validator
 
+Usage
+
+  To check an XSD:
+    java -jar xmlv.jar -c {catalog.xml} -f -a {file.xsd}
+
+  To validate an XML instance:
+    java -jar xmlv.jar -c {catalog.xml} -f -a {file.xsd} -i {file.xml}
+
+Background
+
 Often during projects for which I have to create XML Schemas, I want
 to be sure that I'm not making any mistakes.  I want to validate the
 XSD itself in a manner similar to how any given XML instance file can
