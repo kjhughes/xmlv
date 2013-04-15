@@ -1,7 +1,7 @@
 /*
  * XMLV.java
  *   by Kenneth J Hughes (kjh@entel.com)
- *   Time-stamp: <XMLV.java 2013-04-04 23:56:36 kjh>
+ *   Time-stamp: <XMLV.java 2013-04-15 08:52:43 kjh>
  *   Derived from Xerces v2.11 sample, XMLGrammarBuilder.java, by Neil Graham
  *
  * Copyright 2013 Entelechy Corporation
@@ -291,11 +291,11 @@ public class XMLV {
   }
 
   private static void printUsage() {
-    System.err.println("usage: java -jar xmlv.jar [-p name] -d uri ... | [-f|-F] [-hs|-HS] -a uri ... [-i uri ...]");
+    System.err.println("usage: java -jar xmlv.jar [-p name] [-c xmlCatalog] -d uri ... [-f|-F] [-hs|-HS] -a uri ... [-i uri ...]");
     System.err.println();
     System.err.println("options:");
     System.err.println("  -p name       Select parser configuration by name to use for instance validation");
-    System.err.println("  -c xmlCatalog Specify XML Catalog file.");
+    System.err.println("  -c xmlCatalog Provide an XML Catalog file.");
     System.err.println("  -d            Grammars to preparse are DTD external subsets");
     System.err.println("  -f  | -F      Turn on/off Schema full checking (default "+
                        (DEFAULT_SCHEMA_FULL_CHECKING ? "on" : "off)"));
