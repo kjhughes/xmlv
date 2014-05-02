@@ -3,7 +3,7 @@
   <property name="masterbuild.dir" location="."/>
   <property name="build.dir" location="build"/>
   <property name="src.dir" location="src"/>
-  <property name="xerces.dir" location="c:/gd/usr/kjh/proj/xmlv/xerces-2_11_0"/>
+  <property name="xerces.dir" location="xerces-2_11_0"/>
   <!--  <property name="xerces.dir" location="c:/usr/local/apache/xerces-2_11_0-xml-schema-1.1-beta"/>-->
   <!-- The xml-schema-1.1-beta version has support for xs:assert.
        Unfortunately, it causes compilation errors here, and I've not

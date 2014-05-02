@@ -1,7 +1,7 @@
 /*
  * XMLV.java
  *   by Kenneth J Hughes (kjh@entel.com)
- *   Time-stamp: <XMLV.java 2013-04-15 08:52:43 kjh>
+ *   Time-stamp: <XMLV.java 2014-05-01 19:34:43 kjh>
  *   Derived from Xerces v2.11 sample, XMLGrammarBuilder.java, by Neil Graham
  *
  * Copyright 2013 Entelechy Corporation
@@ -202,16 +202,16 @@ public class XMLV {
     SymbolTable sym = new SymbolTable(BIG_PRIME);
     XMLGrammarPreparser preparser = new XMLGrammarPreparser(sym);
     XMLGrammarPoolImpl grammarPool = new XMLGrammarPoolImpl();
-    boolean isDTD = false;
+    boolean haveDTDs = false;
+    boolean haveXSDs = false;
     if (externalDTDs != null) {
       preparser.registerPreparser(XMLGrammarDescription.XML_DTD, null);
-      isDTD = true;
+      haveDTDs = true;
+      haveXSDs = false;
     } else if (schemas != null) {
       preparser.registerPreparser(XMLGrammarDescription.XML_SCHEMA, null);
-      isDTD = false;
-    } else {
-      System.err.println("No schema or DTD specified!");
-      System.exit(1);
+      haveDTDs = false;
+      haveXSDs = true;
     }
     preparser.setProperty(GRAMMAR_POOL, grammarPool);
     preparser.setFeature(NAMESPACES_FEATURE_ID, true);
@@ -238,22 +238,24 @@ public class XMLV {
       }
     }
 
-    try {
-      if (isDTD) {
-        for (i = 0; i < externalDTDs.size(); i++) {
-          Grammar g = preparser.preparseGrammar(XMLGrammarDescription.XML_DTD, stringToXIS((String)externalDTDs.elementAt(i)));
-          // we don't really care about g; grammarPool will take care of everything.
+    if (haveDTDs || haveXSDs) {
+      try {
+        if (haveDTDs) {
+          for (i = 0; i < externalDTDs.size(); i++) {
+            Grammar g = preparser.preparseGrammar(XMLGrammarDescription.XML_DTD, stringToXIS((String)externalDTDs.elementAt(i)));
+            // we don't really care about g; grammarPool will take care of everything.
+          }
+        } else { // must be schemas.
+          for (i = 0; i < schemas.size(); i++) {
+            String xsdName = (String) schemas.elementAt(i);
+            Grammar g = preparser.preparseGrammar(XMLGrammarDescription.XML_SCHEMA, stringToXIS((String) schemas.elementAt(i)));
+            // we don't really care about g; grammarPool will take care of everything.
+          }
         }
-      } else { // must be schemas.
-        for (i = 0; i < schemas.size(); i++) {
-          String xsdName = (String) schemas.elementAt(i);
-          Grammar g = preparser.preparseGrammar(XMLGrammarDescription.XML_SCHEMA, stringToXIS((String) schemas.elementAt(i)));
-          // we don't really care about g; grammarPool will take care of everything.
-        }
+      } catch (Exception e) {
+        e.printStackTrace();
+        System.exit(1);
       }
-    } catch (Exception e) {
-      e.printStackTrace();
-      System.exit(1);
     }
 
     // We have a grammar pool and a SymbolTable; just build a
